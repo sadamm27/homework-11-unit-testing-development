@@ -5,7 +5,11 @@ class TodoController {
     static findAll = async (req, res, next) => {
     
     try { 
-        const data = await Todo.findAll();
+        const data = await Todo.findAll({
+            where: {
+                status: "active"
+            }
+        });
         res.status(200).json(data);
     } 
         catch(err) {
@@ -40,7 +44,7 @@ class TodoController {
                status 
             })
 
-            res.status(200).json(data);
+            res.status(201).json(data);
         } catch(err) {
             next(err);
         }
@@ -57,7 +61,13 @@ class TodoController {
                     id
                 }
             })
-
+            if (data[0] === 1) {
+                res.status(200).json({
+                    message: "Delete Successfully"
+                })
+            } else {
+                throw {name: "ErrorNotFound"}
+            }
         } catch(err) {
             next(err)
         }
